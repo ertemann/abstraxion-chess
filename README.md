@@ -40,7 +40,7 @@ A Next.js frontend for interacting with the JSON Store smart contract on the XIO
    npm start
    ```
 
-## Manual Configuration
+## Manual Installation
 
 If you prefer to configure the application manually:
 
