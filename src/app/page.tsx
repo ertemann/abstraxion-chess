@@ -182,7 +182,7 @@ export default function Page(): JSX.Element {
 
   return (
     <main className="m-auto flex min-h-screen max-w-6xl flex-col items-center justify-center gap-4 p-4">
-      <h1 className="text-2xl font-bold tracking-tighter text-white">JSON Storage Contract</h1>
+      <h1 className="text-2xl font-bold tracking-tighter text-white">User Map JSON Storage</h1><br /><br />
 
       <div className="flex w-full gap-8">
         {/* Left Column - Buttons */}
