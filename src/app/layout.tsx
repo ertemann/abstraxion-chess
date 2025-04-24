@@ -8,11 +8,10 @@ import "@burnt-labs/ui/dist/index.css";
 
 const inter = Inter({ subsets: ['latin'] })
 
-
 const treasuryConfig = {
-  treasury: "xion1kwp5yff4hmegwfxk34wqq9chlgrj6gddpxqjcu7gnemd4aj4q6ysjcsjvm",
-  rpcUrl: "https://rpc.xion-testnet-2.burnt.com:443",
-  restUrl: "https://api.xion-testnet-2.burnt.com",
+  treasury: process.env.NEXT_PUBLIC_TREASURY_ADDRESS,
+  rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://rpc.xion-testnet-2.burnt.com:443",
+  restUrl: process.env.NEXT_PUBLIC_REST_URL || "https://api.xion-testnet-2.burnt.com",
 };
 
 export default function RootLayout({

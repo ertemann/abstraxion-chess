@@ -12,7 +12,11 @@ import { Button } from "@burnt-labs/ui";
 import "@burnt-labs/ui/dist/index.css";
 import type { ExecuteResult } from "@cosmjs/cosmwasm-stargate";
 
-const contractAddress = "xion1tm7tynvxu3fk220cl6qwfkt4v70ee3ysdsjvrwje9vqv6y2u5yzq5e6e79";
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
+
+if (!contractAddress) {
+  throw new Error("CONTRACT_ADDRESS environment variable is not set");
+}
 
 type ExecuteResultOrUndefined = ExecuteResult | undefined;
 type QueryResult = {
