@@ -44,6 +44,26 @@ export default function Page(): JSX.Element {
   const [addressInput, setAddressInput] = useState<string>("");
   const [activeView, setActiveView] = useState<string>("updateJson");
 
+  // Add effect to fetch user's JSON data when they log in
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (account?.bech32Address && queryClient) {
+        try {
+          const response = await queryClient.queryContractSmart(contractAddress, {
+            get_value_by_user: { address: account.bech32Address }
+          });
+          if (response) {
+            setJsonInput(response);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [account?.bech32Address, queryClient]);
+
   const blockExplorerUrl = `https://www.mintscan.io/xion-testnet/tx/${executeResult?.transactionHash}`;
 
   const clearResults = () => {
