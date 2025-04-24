@@ -78,14 +78,6 @@ If you prefer to configure the application manually:
 - `NEXT_PUBLIC_RPC_URL`: The RPC URL for the XION blockchain (default: https://rpc.xion-testnet-2.burnt.com:443)
 - `NEXT_PUBLIC_REST_URL`: The REST URL for the XION blockchain (default: https://api.xion-testnet-2.burnt.com)
 
-## Development
-
-The application is built with:
-- Next.js
-- React
-- @burnt-labs/abstraxion for wallet integration
-- Tailwind CSS for styling
-
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
