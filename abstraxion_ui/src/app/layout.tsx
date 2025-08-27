@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { Inter } from 'next/font/google'
 import './globals.css'
 import {AbstraxionProvider} from "@burnt-labs/abstraxion";
