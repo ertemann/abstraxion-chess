@@ -112,7 +112,7 @@ export default function ChessBoard({ game, currentPlayer, onMove, disabled, move
         const currentFen = chess.fen();
         setPreviousFen(currentFen);
         
-        // Optimistically apply the move
+        // Apply the move with chess.js (only legal moves allowed)
         const result = chess.move(move);
         if (result) {
           // Generate FEN after the move
@@ -146,6 +146,7 @@ export default function ChessBoard({ game, currentPlayer, onMove, disabled, move
   };
 
   const updatePossibleMoves = (square: string) => {
+    // Use chess.js to get legal moves (prevents putting king in check)
     const moves = chess.moves({ square: square as any, verbose: true });
     setPossibleMoves(moves.map(m => m.to));
   };

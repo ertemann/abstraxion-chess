@@ -771,7 +771,7 @@ pub mod query {
             role: piece.unwrap().role,
         };
 
-        // Check if move is legal
+        // Check if move is legal (follows all chess rules)
         if pos.is_legal(&chess_move) {
             // Make the move and get resulting FEN
             pos.play_unchecked(&chess_move);
