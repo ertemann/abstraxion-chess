@@ -122,6 +122,7 @@ export function useUserProfileUnified(): UseUserProfileReturn {
 
           if (profileResponse.profile) {
             const user: ChessUser = {
+              address: userAddress,
               username: profileResponse.profile.username,
               elo: profileResponse.profile.elo,
               games_played: profileResponse.profile.games_played,

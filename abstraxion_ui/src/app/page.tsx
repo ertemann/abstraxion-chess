@@ -103,6 +103,16 @@ export default function Page(): JSX.Element {
     }
   };
 
+  // Copy address to clipboard
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // Could add a toast notification here if needed
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   // Auto-load leaderboard when component mounts
   React.useEffect(() => {
     if (queryClient) {
@@ -127,15 +137,26 @@ export default function Page(): JSX.Element {
         {/* Left Sidebar */}
         <aside className="w-80 flex flex-col gap-4">
           {/* Connection Button */}
-          <Button 
-            fullWidth 
-            onClick={handleLogin}
-            structure="base"
-          >
-            {account?.bech32Address 
-              ? `${account.bech32Address.slice(0, 10)}...${account.bech32Address.slice(-6)}` 
-              : "CONNECT"}
-          </Button>
+          {account?.bech32Address ? (
+            <div className="bg-gray-800 p-3 rounded-lg">
+              <div className="text-xs text-gray-400 mb-1">Your Address</div>
+              <button
+                onClick={() => copyToClipboard(account.bech32Address)}
+                className="w-full text-left font-mono text-sm bg-gray-700 hover:bg-gray-600 p-2 rounded transition-colors"
+                title="Click to copy full address"
+              >
+                {account.bech32Address.slice(0, 12)}...{account.bech32Address.slice(-8)}
+              </button>
+            </div>
+          ) : (
+            <Button 
+              fullWidth 
+              onClick={handleLogin}
+              structure="base"
+            >
+              CONNECT
+            </Button>
+          )}
 
           {/* Initialize Profile */}
           {account?.bech32Address && !userProfile && (
@@ -228,16 +249,25 @@ export default function Page(): JSX.Element {
             </div>
             <div className="space-y-1 max-h-40 overflow-y-auto">
               {allUsers.slice(0, 10).map((user, index) => (
-                <div key={user.username} className="flex justify-between text-sm py-1">
-                  <span className="flex items-center gap-2">
-                    <span className={`font-bold ${
-                      index === 0 ? 'text-yellow-400' : 'text-gray-400'
-                    }`}>
-                      {index + 1}
+                <div key={user.username} className="text-sm py-1">
+                  <div className="flex justify-between items-center">
+                    <span className="flex items-center gap-2">
+                      <span className={`font-bold ${
+                        index === 0 ? 'text-yellow-400' : 'text-gray-400'
+                      }`}>
+                        {index + 1}
+                      </span>
+                      <span className="truncate max-w-[120px]">{user.username}</span>
                     </span>
-                    <span className="truncate max-w-[120px]">{user.username}</span>
-                  </span>
-                  <span className="text-yellow-400 font-bold">{user.elo}</span>
+                    <span className="text-yellow-400 font-bold">{user.elo}</span>
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(user.address)}
+                    className="w-full text-left text-xs font-mono text-gray-400 hover:text-gray-200 bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded mt-1 transition-colors"
+                    title="Click to copy address"
+                  >
+                    {user.address.slice(0, 10)}...{user.address.slice(-6)}
+                  </button>
                 </div>
               ))}
             </div>

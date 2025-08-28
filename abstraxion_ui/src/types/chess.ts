@@ -1,4 +1,5 @@
 export interface ChessUser {
+  address: string;
   username: string;
   elo: number;
   games_played: number;
