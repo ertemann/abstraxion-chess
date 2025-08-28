@@ -103,11 +103,15 @@ export default function Page(): JSX.Element {
     }
   };
 
-  // Copy address to clipboard
+  // Copy address to clipboard with visual feedback
+  const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
+  
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      // Could add a toast notification here if needed
+      setCopiedAddress(text);
+      // Clear the copied state after 2 seconds
+      setTimeout(() => setCopiedAddress(null), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
@@ -137,18 +141,7 @@ export default function Page(): JSX.Element {
         {/* Left Sidebar */}
         <aside className="w-80 flex flex-col gap-4">
           {/* Connection Button */}
-          {account?.bech32Address ? (
-            <div className="bg-gray-800 p-3 rounded-lg">
-              <div className="text-xs text-gray-400 mb-1">Your Address</div>
-              <button
-                onClick={() => copyToClipboard(account.bech32Address)}
-                className="w-full text-left font-mono text-sm bg-gray-700 hover:bg-gray-600 p-2 rounded transition-colors"
-                title="Click to copy full address"
-              >
-                {account.bech32Address.slice(0, 12)}...{account.bech32Address.slice(-8)}
-              </button>
-            </div>
-          ) : (
+          {!account?.bech32Address && (
             <Button 
               fullWidth 
               onClick={handleLogin}
@@ -171,9 +164,22 @@ export default function Page(): JSX.Element {
           )}
 
           {/* User Profile */}
-          {userProfile && (
+          {userProfile && account?.bech32Address && (
             <div className="bg-gray-800 p-4 rounded-lg">
-              <h3 className="font-bold mb-2">Your Profile</h3>
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-bold">Your Profile</h3>
+                <button
+                  onClick={() => copyToClipboard(account.bech32Address)}
+                  className={`p-1 rounded transition-colors ${
+                    copiedAddress === account.bech32Address
+                      ? 'bg-green-600 text-green-100'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
+                  }`}
+                  title="Copy your address"
+                >
+                  {copiedAddress === account.bech32Address ? '✓' : '📋'}
+                </button>
+              </div>
               <div className="text-sm space-y-1">
                 <div className="truncate">User: {userProfile.username.slice(0, 15)}...</div>
                 <div>ELO: <span className="text-yellow-400 font-bold">{userProfile.elo}</span></div>
@@ -249,25 +255,29 @@ export default function Page(): JSX.Element {
             </div>
             <div className="space-y-1 max-h-40 overflow-y-auto">
               {allUsers.slice(0, 10).map((user, index) => (
-                <div key={user.username} className="text-sm py-1">
-                  <div className="flex justify-between items-center">
-                    <span className="flex items-center gap-2">
-                      <span className={`font-bold ${
-                        index === 0 ? 'text-yellow-400' : 'text-gray-400'
-                      }`}>
-                        {index + 1}
-                      </span>
-                      <span className="truncate max-w-[120px]">{user.username}</span>
+                <div key={user.username} className="flex justify-between items-center text-sm py-1">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className={`font-bold ${
+                      index === 0 ? 'text-yellow-400' : 'text-gray-400'
+                    }`}>
+                      {index + 1}
                     </span>
-                    <span className="text-yellow-400 font-bold">{user.elo}</span>
+                    <span className="truncate">{user.username}</span>
                   </div>
-                  <button
-                    onClick={() => copyToClipboard(user.address)}
-                    className="w-full text-left text-xs font-mono text-gray-400 hover:text-gray-200 bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded mt-1 transition-colors"
-                    title="Click to copy address"
-                  >
-                    {user.address.slice(0, 10)}...{user.address.slice(-6)}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <span className="text-yellow-400 font-bold">{user.elo}</span>
+                    <button
+                      onClick={() => copyToClipboard(user.address)}
+                      className={`p-1 rounded transition-colors ${
+                        copiedAddress === user.address 
+                          ? 'bg-green-600 text-green-100' 
+                          : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
+                      }`}
+                      title="Click to copy address"
+                    >
+                      {copiedAddress === user.address ? '✓' : '📋'}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
