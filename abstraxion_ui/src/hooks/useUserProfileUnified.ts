@@ -81,6 +81,7 @@ export function useUserProfileUnified(): UseUserProfileReturn {
       if (response.profile) {
         // Convert contract format to frontend format
         const profile: ChessUser = {
+          address: account.bech32Address,
           username: response.profile.username,
           elo: response.profile.elo,
           games_played: response.profile.games_played,
